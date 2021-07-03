@@ -138,8 +138,10 @@ if __name__ == '__main__':
     parseArgs()
     startup()
 
-    logging.info(f"Bot will check item '{itemName}' every {TIMEOUT} seconds")
-    print(f"Bot will check item '{itemName}' every {TIMEOUT} seconds")
+    text = f"Bot will check item '{itemName}' every {TIMEOUT} seconds"
+    logging.info(text)
+    print(text)
+    webhook.send(text)
 
     while(True):
         logging.info("Checking product...")
