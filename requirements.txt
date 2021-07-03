@@ -1,0 +1,6 @@
+requests==2.25.1
+beautifulsoup4==4.9.3
+selenium==3.141.0
+argparse==1.4.0
+python-dotenv==0.18.0
+discord==1.7.3
