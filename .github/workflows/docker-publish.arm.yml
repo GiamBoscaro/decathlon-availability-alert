@@ -1,0 +1,60 @@
+name: Docker Build arm64v8
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  IMAGE_NAME: arm64v8/decathlon-alerts
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Prepare multiarch docker
+        run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      
+      - name: Builder create
+        run: docker buildx create --use      
+
+      - name: Build image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.actor }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          VERSION=$(cat version)
+          TAG=$IMAGE_ID:$VERSION
+
+          echo $TAG
+
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+          docker buildx build --push \
+            --tag $TAG \
+            --file Dockerfile.arm \
+            --platform linux/arm64 .
