@@ -1,0 +1,7 @@
+setup:
+  config:
+    MODE: prod
+    HEROKU_APP_NAME: decathlon-availability-alerts
+build:
+  docker:
+    web: Dockerfile
