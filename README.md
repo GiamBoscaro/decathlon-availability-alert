@@ -62,3 +62,19 @@ so in our case `option-product-size-selection-2`.
 Now you can track your new item by running:
 
         python main.py --item <new_item_name>
+
+## 7. Deploy with Heroku (WORK IN PROGRESS)
+
+At the moment, the app will run without args, so the bot will check the default item set on the enviroment variable. This means that to check multiple items, you need multiple apps deployed on Heroku with different env.
+
+* Create a new Heroku app
+
+* Go to settings and add to _Config Vars_ all the variables that were inside `.env`
+
+* Deploy the app with Heroku CLI or directly from your forked/cloned GitHub repo
+
+## 8. Deploy with Docker (WORK IN PROGRESS)
+
+At the moment, the app will run without args, so the bot will check the default item set on the enviroment variable. This means that to check multiple items, you need multiple containers with different env. This is easier to do with Docker Compose.
+
+        example docker-compose TODO
