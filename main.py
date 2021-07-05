@@ -66,9 +66,9 @@ def startup():
         driver.find_element_by_id("didomi-notice-agree-button").click() # Clicks 'accept cookies'
     except Exception as e:
         logging.error(e)
-        driver.refresh()
-        time.sleep(1)
-        startup()
+        # driver.refresh()
+        # time.sleep(1)
+        # startup()
 
 def parseArgs():
     global itemName
@@ -105,6 +105,9 @@ def product_checker():
     except Exception as e:
         # Catch errors and refresh. This is needed for example when the website is on maintenance and the parsing fails
         logging.error(e)
+        if ( str(e).find("didomi") != -1 ):
+            logging.info("Removing cookies popup")
+            driver.find_element_by_id("didomi-notice-agree-button").click()
         driver.refresh()
 
 def send_notification(title, price, size):
