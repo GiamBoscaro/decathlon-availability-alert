@@ -46,7 +46,13 @@ if (BROWSER == "Firefox"):
     driver = webdriver.Firefox(executable_path=join(driver_path, "geckodriver"), options=opts)
 elif (BROWSER == "Chrome"):
     opts = ChromeOptions()
-    opts.add_argument("--headless")
+    opts.add_argument('--no-sandbox')
+    opts.add_argument('--headless')
+    opts.add_argument('--disable-gpu')
+    opts.add_argument('--disable-dev-shm-usage')
+    opts.add_argument('--profile-directory=Default')
+    opts.add_argument('--user-data-dir=~/.config/google-chrome')
+    opts.add_argument("--remote-debugging-port=9222")
     driver = webdriver.Chrome(executable_path=join(driver_path, "chromedriver"), options=opts)
 else:
     logging.info(f"{BROWSER} browser is not supported yet")
@@ -66,6 +72,7 @@ def startup():
         driver.find_element_by_id("didomi-notice-agree-button").click() # Clicks 'accept cookies'
     except Exception as e:
         logging.error(e)
+        driver.quit()
         # driver.refresh()
         # time.sleep(1)
         # startup()
@@ -108,7 +115,15 @@ def product_checker():
         if ( str(e).find("didomi") != -1 ):
             logging.info("Removing cookies popup")
             driver.find_element_by_id("didomi-notice-agree-button").click()
-        driver.refresh()
+            driver.refresh()
+        else:
+            send_error()
+            driver.quit()
+
+def send_error():
+    text = f'An error occurred, bot might have crashed'
+    logging.info(text)
+    webhook.send(text)
 
 def send_notification(title, price, size):
     global lastTimestamp
