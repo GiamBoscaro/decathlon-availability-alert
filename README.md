@@ -12,6 +12,10 @@ Install browser drivers based on your operating system, architecture and browser
 
 * Firefox: <https://github.com/mozilla/geckodriver/releases>
 
+Remember to change permissions:
+
+        chmod 775 <path/to/driver>
+
 ## 3. Install dependencies
 
         pip install -r requirements.txt
